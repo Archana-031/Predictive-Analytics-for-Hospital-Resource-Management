@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    body {
+        background-image: url("/static/login.jpeg"); /* Background image */
+        background-size: cover; /* Cover the entire page */
+        background-position: center; /* Center the background image */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Full height */
+        margin: 10; /* Remove default margin */
+        color: rgb(18, 17, 17); /* Text color for contrast */
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8); /* White background with translucency */
+        border-radius: 8px; /* Rounded corners */
+        padding: 20px; /* Padding inside the form */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        width: 350px; /* Fixed width */
+    }
+
+    h1 {
+        text-align: center; /* Center the heading */
+        color: #333; /* Dark color for heading */
+    }
+
+    label {
+        display: block; /* Block display for labels */
+        margin-bottom: 2px; /* Space between label and input */
+    }
+
+    input[type="text"], input[type="submit"] {
+        width: 95%; /* Full width for inputs */
+        padding: 10px; /* Padding inside inputs */
+        margin-bottom: 15px; /* Space below inputs */
+        border: 1px solid #ccc; /* Light border for inputs */
+        border-radius: 4px; /* Rounded corners */
+        color: black; /* Text color for inputs */
+    }
+
+    input[type="submit"] {
+        background-color: #E52B50; /* Button background color */
+        color: white; /* Button text color */
+        border: none; /* No border */
+        cursor: pointer; /* Pointer cursor on hover */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c8203d; /* Darker shade on hover */
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h2 class="mt-5">Login</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alert alert-dismissible fade show mt-3" role="alert">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p class="mt-3">Don't have an account? <a href="/register">Register here</a></p>
+    </div>
+</body>
+</html>

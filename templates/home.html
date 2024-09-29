@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Resource Management Dashboard</title>
+
+    <!-- Bootstrap CSS for responsive design and layout -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font for better typography -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+
+    <!-- Chart.js for creating charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', Tahoma;
+            background-color: #f8f9fa;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            margin-bottom: 20px;
+        }
+
+        /* Card component styles for resource metrics */
+        .card {
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-title {
+            font-weight: 700;
+        }
+
+        /* General text centering */
+        .text-center {
+            text-align: center;
+        }
+
+        /* Header font size */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* Style for the login and sign-up buttons */
+        .navbar .btn-outline-light {
+            margin-left: 10px;
+        }
+
+        /* Doctor Images Styling for Circles */
+        .doctor-img {
+            width: 100px; /* Size of the image */
+            height: 100px; /* Size of the image */
+            object-fit: cover; /* Ensures the image covers the space */
+            border-radius: 50%; /* Makes the image circular */
+            margin: 0 auto; /* Centers the image */
+        }
+
+        /* Doctor Cards Styling */
+        .doctor-card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .doctor-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hospital Images Styling */
+        .hospital-img {
+            width: 80%; /* Change this to your preferred size */
+            max-width: 700px; /* Set a maximum width for larger screens */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Slightly rounded corners */
+            display: block; /* Make the image a block element */
+            margin: 0 auto; /* Center the image */
+        }
+
+        /* Wrapper for Hospital Images */
+        .hospital-image-wrapper {
+            background-color: #9f8170; /* Pastel pink background */
+            padding: 20px; /* Add some padding */
+            border-radius: 10px; /* Optional: round the corners */
+            display: flex; /* Use flex to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Section -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Hospital Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Resource Allocation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Staff Scheduling</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Settings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hospital Images Carousel Section -->
+    <div class="container mb-4">
+        <div id="hospitalCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="hospital-image-wrapper">
+                        <img src="/static/hospital1.jpeg" alt="Hospital Image 1" class="hospital-img">
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hospital-image-wrapper">
+                        <img src="/static/hospital2.jpeg" alt="Hospital Image 2" class="hospital-img">
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hospital-image-wrapper">
+                        <img src="/static/hospital3.jpeg" alt="Hospital Image 3" class="hospital-img">
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hospital-image-wrapper">
+                        <img src="/static/hospital4.jpeg" alt="Hospital Image 4" class="hospital-img">
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="hospital-image-wrapper">
+                        <img src="/static/hospital5.jpeg" alt="Hospital Image 5" class="hospital-img">
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#hospitalCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#hospitalCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Section (Dashboard) -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Hospital Resource Management Dashboard</h1>
+
+        <!-- Resource Summary Cards Row -->
+        <div class="row text-center mb-4">
+            <!-- Card 1: Available Beds -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Available Beds</h5>
+                        <p class="card-text fs-2" id="bedsAvailable">120</p> <!-- Dynamic Data Display -->
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2: Occupied Beds -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Occupied Beds</h5>
+                        <p class="card-text fs-2" id="bedsOccupied">180</p> <!-- Dynamic Data Display -->
+                    </div>
+                </div>
+            </div>
+            <!-- Card 3: ICU Beds -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Available ICU Beds</h5>
+                        <p class="card-text fs-2" id="icuBedsAvailable">30</p> <!-- Dynamic Data Display -->
+                    </div>
+                </div>
+            </div>
+            <!-- Card 4: Staff on Duty -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Staff on Duty</h5>
+                        <p class="card-text fs-2" id="staffOnDuty">200</p> <!-- Dynamic Data Display -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row for Charts (Bed Occupancy Trend, Staff Availability) -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Bed Occupancy Trend</h5>
+                        <canvas id="bedOccupancyChart"></canvas> <!-- Chart.js Canvas -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Staff Availability</h5>
+                        <canvas id="staffAvailabilityChart"></canvas> <!-- Chart.js Canvas -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section for Doctors -->
+        <h2 class="text-center mt-5 mb-4">Meet Our Doctors</h2>
+        <div class="row text-center">
+            <!-- Doctor 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor1.jpeg" alt="Doctor 1" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. John Doe</h5>
+                        <p class="card-text">Cardiologist</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor2.jpeg" alt="Doctor 2" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. Jane Smith</h5>
+                        <p class="card-text">Neurologist</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor3.jpeg" alt="Doctor 3" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. Emily Davis</h5>
+                        <p class="card-text">Surgeon</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 4 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor4.jpeg" alt="Doctor 4" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. Michael Brown</h5>
+                        <p class="card-text">Pediatrician</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 5 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor5.jpeg" alt="Doctor 5" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. Olivia White</h5>
+                        <p class="card-text">Dermatologist</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 6 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor6.jpeg" alt="Doctor 6" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. James Green</h5>
+                        <p class="card-text">Oncologist</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Doctor 7 -->
+            <div class="col-md-4 mb-4">
+                <div class="card doctor-card shadow-sm">
+                    <img src="/static/doctor7.jpeg" alt="Doctor 7" class="doctor-img">
+                    <div class="card-body">
+                        <h5 class="card-title">Dr. Sophia Black</h5>
+                        <p class="card-text">General Practitioner</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Chart.js Scripts -->
+    <script>
+        // Sample data for Bed Occupancy Trend
+        const ctx1 = document.getElementById('bedOccupancyChart').getContext('2d');
+        const bedOccupancyChart = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                datasets: [{
+                    label: 'Occupied Beds',
+                    data: [150, 170, 180, 160, 190, 200, 220],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                }, {
+                    label: 'Available Beds',
+                    data: [50, 30, 20, 40, 10, 0, -20],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Sample data for Staff Availability
+        const ctx2 = document.getElementById('staffAvailabilityChart').getContext('2d');
+        const staffAvailabilityChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Doctors', 'Nurses', 'Technicians'],
+                datasets: [{
+                    label: 'Available Staff',
+                    data: [120, 180, 60],
+                    backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
